@@ -1,3 +1,3 @@
 export default function Square() {
-  return <button>x</button>
+  return <button>first time connect git with visual sutdio code</button>
 }
