@@ -18,8 +18,7 @@ const (
 )
 
 func DatabaseConnection() *sql.DB {
-	sqlInfo := fmt.Sprintf("host = %s port = %s password = %s dbname = %s sslmode = disable",
-		host, port, user, password, dbName)
+	sqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbName)
 
 	db, err := sql.Open("postgres", sqlInfo)
 	helper.PanicIfError(err)

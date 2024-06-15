@@ -1,7 +1,11 @@
 package helper
 
+import "fmt"
+
 func PanicIfError(err error) {
-	if err != nil { 
+	if err != nil {
+		fmt.Print(err)
 		panic(err)
+
 	}
 }

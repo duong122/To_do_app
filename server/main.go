@@ -3,19 +3,30 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"server/config"
+	"server/controler"
 	"server/helper"
-
-	"github.com/julienschmidt/httprouter"
+	"server/repository"
+	"server/router"
+	"server/service"
 )
 
 func main() {
 	fmt.Printf("Start main")
+	//database
+	db := config.DatabaseConnection()
 
-	routes := httprouter.New()
+	// repository
+	todoRepository := repository.NewTodoRepository(db)
 
-	routes.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		fmt.Printf("Welcome home")
-	})
+	//service
+	todoService := service.NewTodoServiceImpl(todoRepository)
+
+	// controller
+	todoController := controler.NewTodoController(todoService)
+
+	// router
+	routes := router.NewRouter(todoController)
 	server := http.Server{Addr: "localhost:8888", Handler: routes}
 
 	err := server.ListenAndServe()
