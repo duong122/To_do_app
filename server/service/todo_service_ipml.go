@@ -54,5 +54,4 @@ func (b *TodoServiceImpl) Update(ctx context.Context, request request.TodoUpdate
 
 	todo.Name = request.Name
 	b.TodoRepository.Update(ctx, todo)
-
 }

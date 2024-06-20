@@ -18,7 +18,7 @@ func NewRouter(todoController *controler.TodoControler) *httprouter.Router {
 	router.GET("/api/todo", todoController.FindAll)
 	router.GET("/api/todo/:todoId", todoController.FindById)
 	router.POST("/api/todo", todoController.Create)
-	router.PATCH("/api/book/:todoId", todoController.Update)
+	router.PATCH("/api/todo/:todoId", todoController.Update)
 	router.DELETE("/api/todo/:todoId", todoController.Delete)
 
 	return router

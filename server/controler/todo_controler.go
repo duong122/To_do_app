@@ -1,6 +1,7 @@
 package controler
 
 import (
+	"fmt"
 	"net/http"
 	"server/data/request"
 	"server/data/response"
@@ -34,15 +35,16 @@ func (controller *TodoControler) Create(writer http.ResponseWriter, requests *ht
 }
 
 func (controller *TodoControler) Update(writer http.ResponseWriter, requests *http.Request, params httprouter.Params) {
-	todoUpadateRequest := request.TodoUpdateRequest{}
-	helper.ReadRequestBody(requests, &todoUpadateRequest)
+	todoUpdateRequest := request.TodoUpdateRequest{}
+	helper.ReadRequestBody(requests, &todoUpdateRequest)
 
 	todoId := params.ByName("todoId")
+	fmt.Print("todoId: ", todoId)
 	id, err := strconv.Atoi(todoId)
 	helper.PanicIfError(err)
-	todoUpadateRequest.Id = id
+	todoUpdateRequest.Id = id
 
-	controller.TodoService.Update(requests.Context(), todoUpadateRequest)
+	controller.TodoService.Update(requests.Context(), todoUpdateRequest)
 	webResponse := response.WebResponse{
 		Code:   200,
 		Status: "ok",

@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
+	_ "fmt"
 	"server/helper"
 	"server/model"
 )
@@ -22,7 +24,10 @@ func (b *TodoRepositoryIpml) Update(ctx context.Context, todo model.Todo) {
 	defer helper.CommitOrRollback(tx)
 
 	Sql := "update todo set name=$1 where id=$2"
-	_, errExec := tx.ExecContext(ctx, Sql, todo.Name, todo.Id)
+	result, errExec := tx.ExecContext(ctx, Sql, todo.Name, todo.Id)
+	row_effected, errRows := result.RowsAffected()
+	fmt.Printf("result: %d\n", row_effected)
+	fmt.Print("errRows: \n", errRows)
 	helper.PanicIfError(errExec)
 }
 
@@ -63,7 +68,7 @@ func (b *TodoRepositoryIpml) FindById(ctx context.Context, todoId int) (model.To
 	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)
 
-	Sql := "select id,name from todo where id=$1"
+	Sql := "select id, name from todo where id=$1"
 	result, errQuery := tx.QueryContext(ctx, Sql, todoId)
 	helper.PanicIfError(errQuery)
 	defer result.Close()
@@ -71,8 +76,9 @@ func (b *TodoRepositoryIpml) FindById(ctx context.Context, todoId int) (model.To
 	todo := model.Todo{}
 
 	if result.Next() {
-		err := result.Scan(&todoId, todo.Name)
+		err := result.Scan(&todo.Id, &todo.Name) // lỗi xảy ra ở dòng này
 		helper.PanicIfError(err)
+		fmt.Print("todoId: ", todo.Id) // hàm findbyId nhận được id là 0
 		return todo, nil
 	} else {
 		return todo, errors.New("todo id not found")
