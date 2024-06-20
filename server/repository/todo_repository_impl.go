@@ -76,9 +76,9 @@ func (b *TodoRepositoryIpml) FindById(ctx context.Context, todoId int) (model.To
 	todo := model.Todo{}
 
 	if result.Next() {
-		err := result.Scan(&todo.Id, &todo.Name) // lỗi xảy ra ở dòng này
+		err := result.Scan(&todo.Id, &todo.Name) // lỗi xảy ra ở dòng này, tôi đã ghi vào  biến todoId thay vì ghi vào todo.Id
 		helper.PanicIfError(err)
-		fmt.Print("todoId: ", todo.Id) // hàm findbyId nhận được id là 0
+		fmt.Print("todoId: ", todo.Id) // hàm findbyId nhận được id là 0 -> dẫn đến hàm todo.Id nhân đuọc luôn mặc định là 0
 		return todo, nil
 	} else {
 		return todo, errors.New("todo id not found")
